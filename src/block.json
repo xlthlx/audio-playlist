@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "xlthlx/mp3-album",
+  "version": "0.1.0",
+  "title": "Mp3 Album",
+  "category": "media",
+  "icon": "playlist-audio",
+  "description": "Create and show your album with mp3 list.",
+  "keywords": [
+	"mp3",
+	"playlist",
+	"list",
+	"album",
+	"cover"
+  ],
+  "supports": {
+	"html": true,
+	"className": true,
+	"multiple": false,
+	"color": {
+	  "text": true,
+	  "background": true,
+	  "link": true
+	},
+	"example": {}
+  },
+  "textdomain": "mp3-album",
+  "attributes": {
+	"tracks": {
+	  "selector": "li",
+	  "type": "array",
+	  "default": []
+	}
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

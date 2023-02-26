@@ -1,0 +1,250 @@
+/**
+ * The following styles get applied inside the editor only.
+ */
+
+$color_1: white;
+$color_2: black;
+$color_3: #EEEEEE;
+$color_4: #555555;
+$color_5: #AAAAAA;
+
+.player-container {
+  margin: 0 auto;
+  text-align: left;
+
+  .components-button.is-small.action {
+	vertical-align: middle;
+	box-shadow: none;
+	margin-bottom: 6px;
+	padding: 6px;
+  }
+
+  .display-none {
+	display: none;
+	transition: right 5s ease;
+	visibility: hidden;
+  }
+
+  [hidden] {
+	display: none;
+  }
+
+  .right {
+	float: right;
+  }
+
+  .left {
+	clear: both;
+	float: left;
+  }
+
+  .mp3__buttons {
+	button {
+	  cursor: pointer;
+	  border: 1px solid $color_3;
+	  border-radius: 5px;
+	  background-color: $color_3;
+	  padding: 5px;
+	  vertical-align: middle;
+
+	  &:hover {
+		cursor: pointer;
+		border: 1px solid $color_3;
+		background-color: $color_2;
+		color: $color_1;
+		border-radius: 5px;
+	  }
+	}
+  }
+
+  #play-pause-container {
+	clear: both;
+	margin: 0 auto;
+	max-width: fit-content;
+	padding: 10px 20px;
+  }
+
+  #seek-container {
+	width: calc(100% - 100px);
+  }
+
+  #seek-slider {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	width: 100%
+  }
+
+  p {
+	margin: 0.6rem 0;
+  }
+
+  .dashicons {
+	width: 30px;
+	height: 30px;
+	font-size: 30px;
+
+	&.dashicons-trash {
+	  width: 27px;
+	  height: 27px;
+	  font-size: 27px;
+	  padding: 6px 6px 6px 0;
+	}
+
+	&.dashicons-edit {
+	  margin-left: 10px;
+	  padding-left: 6px;
+	}
+  }
+
+  input[type="range"] {
+	-webkit-appearance: none;
+	margin-right: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background: $color_3;
+	background-image: linear-gradient($color_2, $color_2);
+	background-size: 0 100%;
+	background-repeat: no-repeat;
+
+	&::-webkit-slider-thumb {
+	  -webkit-appearance: none;
+	  height: 18px;
+	  width: 18px;
+	  border-radius: 5px;
+	  background: $color_2;
+	  cursor: ew-resize;
+	  box-shadow: 0 0 2px 0 $color_4;
+	  transition: background 0.3s ease-in-out;
+	}
+
+	&::-moz-range-thumb {
+	  -webkit-appearance: none;
+	  height: 14px;
+	  width: 14px;
+	  border-radius: 5px;
+	  background: $color_2;
+	  cursor: ew-resize;
+	  box-shadow: 0 0 2px 0 $color_4;
+	  transition: background 0.3s ease-in-out;
+	}
+
+	&::-ms-thumb {
+	  -webkit-appearance: none;
+	  height: 14px;
+	  width: 14px;
+	  border-radius: 5px;
+	  background: $color_2;
+	  cursor: ew-resize;
+	  box-shadow: 0 0 2px 0 $color_4;
+	  transition: background 0.3s ease-in-out;
+	}
+
+	&::-webkit-slider-runnable-track {
+	  -webkit-appearance: none;
+	  box-shadow: none;
+	  border: none;
+	  background: transparent;
+	}
+
+	&::-moz-range-track {
+	  -webkit-appearance: none;
+	  box-shadow: none;
+	  border: none;
+	  background: transparent;
+	}
+
+	&::-ms-track {
+	  -webkit-appearance: none;
+	  box-shadow: none;
+	  border: none;
+	  background: transparent;
+	}
+  }
+
+  #play-button, #pause-button {
+	margin: 0 8px;
+  }
+
+  .playing {
+	min-width: 50%;
+	overflow: hidden;
+	max-width: 20ch;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	float: left;
+  }
+
+  .repeat {
+	float: left;
+	margin: 0.5rem 0 0.5rem 8px;
+	text-align: right;
+  }
+
+  .dashicons-controls-repeat:before {
+	color: $color_5;
+  }
+
+  .dashicons-controls-repeat:hover:before {
+	color: $color_1;
+  }
+
+  .dashicons-controls-repeat.on:before {
+	color: $color_2 !important;
+  }
+
+  .dashicons-controls-repeat.on:hover:before {
+	color: $color_1 !important;
+  }
+
+  #volume-slider {
+	background-size: 100% 100%;
+  }
+
+  #volume-container > #volume-slider {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.8s linear;
+  }
+
+  #volume-container:hover > #volume-slider:not(.right) {
+	visibility: visible;
+	opacity: 1;
+  }
+
+  #volume-container {
+	margin: 0.5rem 0;
+	min-width: 42%;
+	text-align: right;
+	float: left;
+  }
+
+  ol#playlist {
+	list-style-type: none;
+	padding: 0;
+
+	li {
+	  padding: 10px 0 40px 0;
+
+	  &.track {
+		padding: 10px 15px!important;
+		cursor: pointer;
+
+		&.active {
+		  background-color: $color_3;
+		  border-radius: 5px;
+		}
+
+		&:hover {
+		  background-color: $color_3;
+		  border-radius: 5px;
+		}
+
+		a {
+		  color: $color_2;
+		  text-decoration: none;
+		}
+	  }
+	}
+  }
+}

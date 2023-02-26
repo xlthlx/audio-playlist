@@ -1,0 +1,212 @@
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ */
+.player-container {
+  margin: 0 auto;
+  text-align: left;
+}
+.player-container .components-button.is-small.action {
+  vertical-align: middle;
+  box-shadow: none;
+  margin-bottom: 6px;
+  padding: 6px;
+}
+.player-container .display-none {
+  display: none;
+  transition: right 5s ease;
+  visibility: hidden;
+}
+.player-container [hidden] {
+  display: none;
+}
+.player-container .right {
+  float: right;
+}
+.player-container .left {
+  clear: both;
+  float: left;
+}
+.player-container .mp3__buttons button {
+  cursor: pointer;
+  border: 1px solid #EEEEEE;
+  border-radius: 5px;
+  background-color: #EEEEEE;
+  padding: 5px;
+  vertical-align: middle;
+}
+.player-container .mp3__buttons button:hover {
+  cursor: pointer;
+  border: 1px solid #EEEEEE;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+}
+.player-container #play-pause-container {
+  clear: both;
+  margin: 0 auto;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  padding: 10px 20px;
+}
+.player-container #seek-container {
+  width: calc(100% - 100px);
+}
+.player-container #seek-slider {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 100%;
+}
+.player-container p {
+  margin: 0.6rem 0;
+}
+.player-container .dashicons {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+}
+.player-container .dashicons.dashicons-trash {
+  width: 27px;
+  height: 27px;
+  font-size: 27px;
+  padding: 6px 6px 6px 0;
+}
+.player-container .dashicons.dashicons-edit {
+  margin-left: 10px;
+  padding-left: 6px;
+}
+.player-container input[type=range] {
+  -webkit-appearance: none;
+  margin-right: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background: #EEEEEE;
+  background-image: linear-gradient(black, black);
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+}
+.player-container input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 5px;
+  background: black;
+  cursor: ew-resize;
+  box-shadow: 0 0 2px 0 #555555;
+  -webkit-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+}
+.player-container input[type=range]::-moz-range-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 5px;
+  background: black;
+  cursor: ew-resize;
+  box-shadow: 0 0 2px 0 #555555;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+}
+.player-container input[type=range]::-ms-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 5px;
+  background: black;
+  cursor: ew-resize;
+  box-shadow: 0 0 2px 0 #555555;
+  -ms-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+}
+.player-container input[type=range]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+.player-container input[type=range]::-moz-range-track {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+.player-container input[type=range]::-ms-track {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+.player-container #play-button, .player-container #pause-button {
+  margin: 0 8px;
+}
+.player-container .playing {
+  min-width: 50%;
+  overflow: hidden;
+  max-width: 20ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  float: left;
+}
+.player-container .repeat {
+  float: left;
+  margin: 0.5rem 0 0.5rem 8px;
+  text-align: right;
+}
+.player-container .dashicons-controls-repeat:before {
+  color: #AAAAAA;
+}
+.player-container .dashicons-controls-repeat:hover:before {
+  color: white;
+}
+.player-container .dashicons-controls-repeat.on:before {
+  color: black !important;
+}
+.player-container .dashicons-controls-repeat.on:hover:before {
+  color: white !important;
+}
+.player-container #volume-slider {
+  background-size: 100% 100%;
+}
+.player-container #volume-container > #volume-slider {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.8s linear;
+}
+.player-container #volume-container:hover > #volume-slider:not(.right) {
+  visibility: visible;
+  opacity: 1;
+}
+.player-container #volume-container {
+  margin: 0.5rem 0;
+  min-width: 42%;
+  text-align: right;
+  float: left;
+}
+.player-container ol#playlist {
+  list-style-type: none;
+  padding: 0;
+}
+.player-container ol#playlist li {
+  padding: 10px 0 40px 0;
+}
+.player-container ol#playlist li.track {
+  padding: 10px 15px !important;
+  cursor: pointer;
+}
+.player-container ol#playlist li.track.active {
+  background-color: #EEEEEE;
+  border-radius: 5px;
+}
+.player-container ol#playlist li.track:hover {
+  background-color: #EEEEEE;
+  border-radius: 5px;
+}
+.player-container ol#playlist li.track a {
+  color: black;
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=index.css.map*/
