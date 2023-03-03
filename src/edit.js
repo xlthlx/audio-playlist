@@ -10,34 +10,24 @@ export default function edit ({ attributes, setAttributes }) {
 		['core/heading', { placeholder: 'Album title', textAlign: 'center', level: 3 }]
 	]
 
-	const nowPLaying = document.getElementsByClassName('playing')[0],
-		mp3Player = document.getElementById('player'),
-		playlist = document.getElementById('playlist'),
-		playButton = document.getElementById('play-button'),
-		pauseButton = document.getElementById('pause-button'),
-		currentTime = document.getElementById('current-time'),
-		totalTime = document.getElementById('total-time'),
-		seekSlider = document.getElementById('seek-slider'),
-		volMuteButton = document.getElementById('vol-mute-btn'),
-		volMutedButton = document.getElementById('vol-muted-btn'),
-		volumeSlider = document.getElementById('volume-slider'),
-		svgRepeat = document.getElementsByClassName('dashicons-controls-repeat')[0]
-
-	let elems
-
-	if (playlist && playlist.length !== 0) {
-		elems = playlist.getElementsByClassName('track')
-	}
-
-	if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
-		svgRepeat.classList.add('on')
-	}
-
 	const prepZero = (number) => {
 		if (number < 9)
 			return '0' + number
 		else
 			return number
+	}
+
+	let elems
+
+	let playlist = document.querySelector('.playlist')
+	if (playlist && playlist.length !== 0) {
+		elems = playlist.getElementsByClassName('track')
+	}
+
+	let svgRepeat = document.querySelector('.dashicons-controls-repeat')
+
+	if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
+		svgRepeat.classList.add('on')
 	}
 
 	const onTrackChange = (index, media) => {
@@ -67,17 +57,17 @@ export default function edit ({ attributes, setAttributes }) {
 	}
 
 	const setSource = (i) => {
-		if (elems.length !== 0) {
-			mp3Player.src = elems[i].children[0].getAttribute('href')
-			mp3Player.load()
-			playButton.click()
+		if (0 !== elems.length) {
+			document.querySelector('.player').src = elems[i].children[0].getAttribute('href')
+			document.querySelector('.player').load()
+			document.querySelector('.play-button').click()
 		}
 	}
 
 	const setNowPlaying = (item) => {
 		let num = item.dataset.num
 		let title = item.dataset.title
-		nowPLaying.textContent = num + ' - ' + title
+		document.querySelector('.playing').textContent = num + ' - ' + title
 	}
 
 	const setFirstTrack = (elems) => {
@@ -142,43 +132,43 @@ export default function edit ({ attributes, setAttributes }) {
 	}
 
 	const setPause = () => {
-		playButton.classList.remove('display-none')
-		pauseButton.classList.add('display-none')
+		document.querySelector('.play-button').classList.remove('display-none')
+		document.querySelector('.pause-button').classList.add('display-none')
 	}
 
 	const setPlay = () => {
-		playButton.classList.add('display-none')
-		pauseButton.classList.remove('display-none')
+		document.querySelector('.play-button').classList.add('display-none')
+		document.querySelector('.pause-button').classList.remove('display-none')
 	}
 
 	const toggleMuteUnmute = () => {
-		volMutedButton.classList.toggle('display-none')
-		volMuteButton.classList.toggle('display-none')
+		document.querySelector('.vol-muted-btn').classList.toggle('display-none')
+		document.querySelector('.vol-mute-btn').classList.toggle('display-none')
 	}
 
 	const setVolumeSlider = () => {
-		volumeSlider.value = mp3Player.volume
+		document.querySelector('.volume-slider').value = document.querySelector('.player').volume
 	}
 
 	const clickMuteButton = () => {
-		mp3Player.muted = true
-		mp3Player.volume = 0
+		document.querySelector('.player').muted = true
+		document.querySelector('.player').volume = 0
 		setVolumeSlider()
 		toggleMuteUnmute()
-		volumeSlider.style.backgroundSize = '0% 100%'
+		document.querySelector('.volume-slider').style.backgroundSize = '0% 100%'
 	}
 
 	const clickUnMuteButton = () => {
-		mp3Player.muted = false
-		mp3Player.volume = 1
+		document.querySelector('.player').muted = false
+		document.querySelector('.player').volume = 1
 		setVolumeSlider()
 		toggleMuteUnmute()
-		volumeSlider.style.backgroundSize = '100% 100%'
+		document.querySelector('.volume-slider').style.backgroundSize = '100% 100%'
 	}
 
 	const clickPlayButton = () => {
-		if (elems.length !== 0) {
-			mp3Player.play()
+		if (0 !== elems.length) {
+			document.querySelector('.player').play()
 			for (let i = 0; i < elems.length; i++) {
 				if (elems[i].classList.contains('active')) {
 					setNowPlaying(elems[i].children[0])
@@ -188,7 +178,7 @@ export default function edit ({ attributes, setAttributes }) {
 		}
 	}
 	const clickPauseButton = () => {
-		mp3Player.pause()
+		document.querySelector('.player').pause()
 		setPause()
 	}
 
@@ -205,14 +195,16 @@ export default function edit ({ attributes, setAttributes }) {
 	}
 
 	const loadMetaData = (event) => {
-		totalTime.innerHTML = convertElapsedTime(event.target.duration)
-		currentTime.innerHTML = convertElapsedTime(event.target.currentTime)
+		document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration)
+		document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
+		let seekSlider = document.querySelector('.seek-slider')
 		seekSlider.max = event.target.duration
 		seekSlider.setAttribute('value', event.target.currentTime)
 	}
 
 	const timeUpdate = (event) => {
-		currentTime.innerHTML = convertElapsedTime(event.target.currentTime)
+		document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
+		let seekSlider = document.querySelector('.seek-slider')
 		seekSlider.setAttribute('value', event.target.currentTime)
 		seekSlider.value = event.target.currentTime
 
@@ -224,11 +216,11 @@ export default function edit ({ attributes, setAttributes }) {
 	}
 
 	const onChangeSlider = (event) => {
-		mp3Player.currentTime = event.target.value
+		document.querySelector('.player').currentTime = event.target.value
 	}
 
 	const changeVolume = (event) => {
-		mp3Player.volume = event.target.value
+		document.querySelector('.player').volume = event.target.value
 
 		const min = event.target.min
 		const max = event.target.max
@@ -249,8 +241,8 @@ export default function edit ({ attributes, setAttributes }) {
 	const onClickTrack = (event) => {
 		event.preventDefault()
 
-		mp3Player.src = event.target.href
-		mp3Player.load()
+		document.querySelector('.player').src = event.target.href
+		document.querySelector('.player').load()
 
 		clickPlayButton()
 		setNowPlaying(event.target)
@@ -266,7 +258,7 @@ export default function edit ({ attributes, setAttributes }) {
 	const audioPlayer = tracks.map((track, index) => {
 		if (index === 0)
 			return (
-				<audio key={index} id="player" onEnded={() => onEndTRack()} onTimeUpdate={event => timeUpdate(event)}
+				<audio key={index} className="player" onEnded={() => onEndTRack()} onTimeUpdate={event => timeUpdate(event)}
 							 onLoadedMetadata={event => loadMetaData(event)}>
 					<source src={track.url} type="audio/mpeg"/>
 					<p>
@@ -319,74 +311,73 @@ export default function edit ({ attributes, setAttributes }) {
 			<div className="player-container">
 				<InnerBlocks
 					template={ALBUM_TEMPLATE}
-					templateLock="all"
+					templateLock="insert"
 				/>
-				<div className="mp3__buttons">
-					{audioPlayer}
-					{nowPlaying}
-					<div id="volume-container">
+				{audioPlayer}
+				{nowPlaying}
+				<div className="volume-container">
 
+					<div className="volume-show">
 						<label htmlFor="volume-slider" hidden>Volume</label>
-						<input onChange={event => changeVolume(event)} id="volume-slider" type="range" min="0" max="1" step="0.1"
+						<input onChange={event => changeVolume(event)} className="volume-slider" type="range" min="0" max="1"
+									 step="0.1"
 									 autoComplete="off" role="slider" aria-label="Volume"/>
 
 						<button title="Mute volume" onClick={() => clickMuteButton()}
-										id="vol-mute-btn" aria-labelledby="vol-mute-label">
+										className="vol-mute-btn" aria-labelledby="vol-mute-label">
 							<span className="dashicons dashicons-controls-volumeon"></span>
 							<span id="vol-mute-label" hidden>Mute volume</span>
 						</button>
 
-						<button title="Unmute volume" className="display-none" onClick={() => clickUnMuteButton()}
-										id="vol-muted-btn" aria-labelledby="vol-muted-label">
+						<button title="Unmute volume" className="vol-muted-btn display-none" onClick={() => clickUnMuteButton()}
+										aria-labelledby="vol-muted-label">
 							<span className="dashicons dashicons-controls-volumeoff"></span>
 							<span id="vol-muted-label" hidden>Unmute volume</span>
 						</button>
-
 					</div>
 
-					<div className="repeat">
-						<button onClick={() => clickRepeatButton()} title="Repeat all" aria-labelledby="vol-repeat-label">
-							<span className="dashicons dashicons-controls-repeat"></span>
-							<span id="vol-repeat-label" hidden>Repeat all</span>
-						</button>
-					</div>
+					<button onClick={() => clickRepeatButton()} title="Repeat all" className="repeat"
+									aria-labelledby="vol-repeat-label">
+						<span className="dashicons dashicons-controls-repeat"></span>
+						<span id="vol-repeat-label" hidden>Repeat all</span>
+					</button>
 
-					<div id="seek-container" className="left">
-						<label htmlFor="seek-slider" hidden>Seek</label>
-						<input onChange={event => onChangeSlider(event)} id="seek-slider" type="range" min="0" step="0.01"
-									 autoComplete="off" role="slider" aria-label="Seek"/>
-					</div>
-
-					<div className="right"><span id="current-time"></span> / <span id="total-time"></span></div>
-
-					<div id="play-pause-container">
-
-						<button onClick={() => clickPrevButton()} title="Previous track" aria-labelledby="prev-label" type="button">
-							<span className="dashicons dashicons-controls-back"></span>
-							<span id="prev-label" hidden>Previous track</span>
-						</button>
-
-						<button onClick={() => clickPlayButton()} title="Play" id="play-button" aria-labelledby="play-label"
-										type="button">
-							<span className="dashicons dashicons-controls-play"></span>
-							<span id="play-label" hidden>Play</span>
-						</button>
-
-						<button onClick={() => clickPauseButton()} title="Pause" id="pause-button" aria-labelledby="pause-label"
-										className="display-none" type="button">
-							<span className="dashicons dashicons-controls-pause"></span>
-							<span id="pause-label" hidden>Pause</span>
-						</button>
-
-						<button onClick={() => clickNextButton()} title="Next track" id="next-button" aria-labelledby="next-label"
-										type="button">
-							<span className="dashicons dashicons-controls-forward"></span>
-							<span id="next-label" hidden>Next track</span>
-						</button>
-
-					</div>
 				</div>
-				<ol id="playlist" className="mp3-album__tracks">
+
+				<div className="seek-container left">
+					<label htmlFor="seek-slider" hidden>Seek</label>
+					<input onChange={event => onChangeSlider(event)} className="seek-slider" type="range" min="0" step="0.01"
+								 autoComplete="off" role="slider" aria-label="Seek"/>
+				</div>
+
+				<div className="right"><span className="current-time"></span> / <span className="total-time"></span></div>
+
+				<div className="play-pause-container">
+
+					<button onClick={() => clickPrevButton()} title="Previous track" aria-labelledby="prev-label" type="button">
+						<span className="dashicons dashicons-controls-back"></span>
+						<span id="prev-label" hidden>Previous track</span>
+					</button>
+
+					<button onClick={() => clickPlayButton()} title="Play" className="play-button" aria-labelledby="play-label"
+									type="button">
+						<span className="dashicons dashicons-controls-play"></span>
+						<span id="play-label" hidden>Play</span>
+					</button>
+
+					<button onClick={() => clickPauseButton()} title="Pause" aria-labelledby="pause-label"
+									className="pause-button display-none" type="button">
+						<span className="dashicons dashicons-controls-pause"></span>
+						<span id="pause-label" hidden>Pause</span>
+					</button>
+
+					<button onClick={() => clickNextButton()} title="Next track" aria-labelledby="next-label" type="button">
+						<span className="dashicons dashicons-controls-forward"></span>
+						<span id="next-label" hidden>Next track</span>
+					</button>
+
+				</div>
+				<ol className="playlist">
 					{trackItems}
 					<li>
 						<MediaUploadCheck>

@@ -1,6 +1,5 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor'
 
-
 export default function save ({ attributes }) {
 	const { tracks } = attributes
 
@@ -27,7 +26,8 @@ export default function save ({ attributes }) {
 	const audioPlayer = tracks.map((track, index) => {
 		if (index === 0)
 			return (
-				<audio key={index} id="player" onEnded="onEndTRack()" onTimeUpdate="timeUpdate(event)" onLoadedMetadata="loadMetaData(event)">
+				<audio key={index} className="player" onEnded="onEndTRack()"
+							 onTimeUpdate="timeUpdate(event)" onLoadedMetadata="loadMetaData(event)">
 					<source src={track.url} type="audio/mpeg"/>
 					<p>
 						Your browser does not support HTML audio, but you can still
@@ -45,74 +45,71 @@ export default function save ({ attributes }) {
 	})
 
 	return (
-		<div id="player-container">
+		<div className="player-container">
 			<div {...useBlockProps.save()}>
 				<InnerBlocks.Content/>
 			</div>
 			{audioPlayer}
 			{nowPlaying}
-			<div id="volume-container">
+			<div className="volume-container">
 
-				<label htmlFor="volume-slider" hidden>Volume</label>
-				<input onMouseMove="changeVolume(event)" id="volume-slider" type="range" min="0" max="1" step="0.1"
-							 autoComplete="off" role="slider" aria-label="Volume"/>
+				<div className="volume-show">
+					<label htmlFor="volume-slider" hidden>Volume</label>
+					<input onMouseMove="changeVolume(event)" className="volume-slider" type="range" min="0" max="1" value="1"
+								 step="0.1" autoComplete="off" role="slider" aria-label="Volume"/>
 
-				<button title="Mute volume" onClick="clickMuteButton()"
-								id="vol-mute-btn" aria-labelledby="vol-mute-label">
-					<span className="dashicons dashicons-controls-volumeon"></span>
-					<span id="vol-mute-label" hidden>Mute volume</span>
-				</button>
+					<button title="Mute volume" onClick="clickMuteButton()" className="vol-mute-btn" aria-labelledby="vol-mute-label">
+						<span className="dashicons dashicons-controls-volumeon"></span>
+						<span id="vol-mute-label" hidden>Mute volume</span>
+					</button>
 
-				<button title="Unmute volume" className="display-none" onClick="clickUnMuteButton()"
-								id="vol-muted-btn" aria-labelledby="vol-muted-label">
-					<span className="dashicons dashicons-controls-volumeoff"></span>
-					<span id="vol-muted-label" hidden>Unmute volume</span>
-				</button>
+					<button title="Unmute volume" className="vol-muted-btn display-none" onClick="clickUnMuteButton()" aria-labelledby="vol-muted-label">
+						<span className="dashicons dashicons-controls-volumeoff"></span>
+						<span id="vol-muted-label" hidden>Unmute volume</span>
+					</button>
+				</div>
 
-			</div>
-
-			<div className="repeat">
-				<button onClick="clickRepeatButton()" title="Repeat all" aria-labelledby="vol-repeat-label">
+				<button onClick="clickRepeatButton()" title="Repeat all" className="repeat" aria-labelledby="vol-repeat-label">
 					<span className="dashicons dashicons-controls-repeat"></span>
 					<span id="vol-repeat-label" hidden>Repeat all</span>
 				</button>
+
 			</div>
 
-			<div id="seek-container" className="left">
+			<div className="seek-container left">
 				<label htmlFor="seek-slider" hidden>Seek</label>
-				<input onChange="onChangeSlider(event)" id="seek-slider" type="range" min="0" step="0.01"
+				<input onChange="onChangeSlider(event)" className="seek-slider" type="range" min="0" step="0.01"
 							 autoComplete="off" role="slider" aria-label="Seek"/>
 			</div>
 
-			<div className="right"><span id="current-time"></span> / <span id="total-time"></span></div>
+			<div className="right"><span className="current-time"></span> / <span className="total-time"></span></div>
 
-			<div id="play-pause-container">
+			<div className="play-pause-container">
 
 				<button onClick="clickPrevButton()" title="Previous track" aria-labelledby="prev-label" type="button">
 					<span className="dashicons dashicons-controls-back"></span>
 					<span id="prev-label" hidden>Previous track</span>
 				</button>
 
-				<button onClick="clickPlayButton()" title="Play" id="play-button" aria-labelledby="play-label"
+				<button onClick="clickPlayButton()" title="Play" className="play-button" aria-labelledby="play-label"
 								type="button">
 					<span className="dashicons dashicons-controls-play"></span>
 					<span id="play-label" hidden>Play</span>
 				</button>
 
-				<button onClick="clickPauseButton()" title="Pause" id="pause-button" aria-labelledby="pause-label"
-								className="display-none" type="button">
+				<button onClick="clickPauseButton()" title="Pause" className="pause-button display-none"
+								aria-labelledby="pause-label" type="button">
 					<span className="dashicons dashicons-controls-pause"></span>
 					<span id="pause-label" hidden>Pause</span>
 				</button>
 
-				<button onClick="clickNextButton()" title="Next track" id="next-button" aria-labelledby="next-label"
-								type="button">
+				<button onClick="clickNextButton()" title="Next track" aria-labelledby="next-label" type="button">
 					<span className="dashicons dashicons-controls-forward"></span>
 					<span id="next-label" hidden>Next track</span>
 				</button>
 
 			</div>
-			<ol id="playlist" className="mp3-album__tracks">
+			<ol className="playlist">
 				{trackItems}
 			</ol>
 		</div>

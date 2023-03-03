@@ -44,28 +44,18 @@ function edit(_ref) {
     textAlign: 'center',
     level: 3
   }]];
-  const nowPLaying = document.getElementsByClassName('playing')[0],
-    mp3Player = document.getElementById('player'),
-    playlist = document.getElementById('playlist'),
-    playButton = document.getElementById('play-button'),
-    pauseButton = document.getElementById('pause-button'),
-    currentTime = document.getElementById('current-time'),
-    totalTime = document.getElementById('total-time'),
-    seekSlider = document.getElementById('seek-slider'),
-    volMuteButton = document.getElementById('vol-mute-btn'),
-    volMutedButton = document.getElementById('vol-muted-btn'),
-    volumeSlider = document.getElementById('volume-slider'),
-    svgRepeat = document.getElementsByClassName('dashicons-controls-repeat')[0];
-  let elems;
-  if (playlist && playlist.length !== 0) {
-    elems = playlist.getElementsByClassName('track');
-  }
-  if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
-    svgRepeat.classList.add('on');
-  }
   const prepZero = number => {
     if (number < 9) return '0' + number;else return number;
   };
+  let elems;
+  let playlist = document.querySelector('.playlist');
+  if (playlist && playlist.length !== 0) {
+    elems = playlist.getElementsByClassName('track');
+  }
+  let svgRepeat = document.querySelector('.dashicons-controls-repeat');
+  if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
+    svgRepeat.classList.add('on');
+  }
   const onTrackChange = (index, media) => {
     const updatedTracks = [...tracks];
     updatedTracks[index] = {
@@ -94,16 +84,16 @@ function edit(_ref) {
     return minutes + ':' + seconds;
   };
   const setSource = i => {
-    if (elems.length !== 0) {
-      mp3Player.src = elems[i].children[0].getAttribute('href');
-      mp3Player.load();
-      playButton.click();
+    if (0 !== elems.length) {
+      document.querySelector('.player').src = elems[i].children[0].getAttribute('href');
+      document.querySelector('.player').load();
+      document.querySelector('.play-button').click();
     }
   };
   const setNowPlaying = item => {
     let num = item.dataset.num;
     let title = item.dataset.title;
-    nowPLaying.textContent = num + ' - ' + title;
+    document.querySelector('.playing').textContent = num + ' - ' + title;
   };
   const setFirstTrack = elems => {
     if (localStorage.getItem('repeat') === 'true') {
@@ -160,37 +150,37 @@ function edit(_ref) {
     }
   };
   const setPause = () => {
-    playButton.classList.remove('display-none');
-    pauseButton.classList.add('display-none');
+    document.querySelector('.play-button').classList.remove('display-none');
+    document.querySelector('.pause-button').classList.add('display-none');
   };
   const setPlay = () => {
-    playButton.classList.add('display-none');
-    pauseButton.classList.remove('display-none');
+    document.querySelector('.play-button').classList.add('display-none');
+    document.querySelector('.pause-button').classList.remove('display-none');
   };
   const toggleMuteUnmute = () => {
-    volMutedButton.classList.toggle('display-none');
-    volMuteButton.classList.toggle('display-none');
+    document.querySelector('.vol-muted-btn').classList.toggle('display-none');
+    document.querySelector('.vol-mute-btn').classList.toggle('display-none');
   };
   const setVolumeSlider = () => {
-    volumeSlider.value = mp3Player.volume;
+    document.querySelector('.volume-slider').value = document.querySelector('.player').volume;
   };
   const clickMuteButton = () => {
-    mp3Player.muted = true;
-    mp3Player.volume = 0;
+    document.querySelector('.player').muted = true;
+    document.querySelector('.player').volume = 0;
     setVolumeSlider();
     toggleMuteUnmute();
-    volumeSlider.style.backgroundSize = '0% 100%';
+    document.querySelector('.volume-slider').style.backgroundSize = '0% 100%';
   };
   const clickUnMuteButton = () => {
-    mp3Player.muted = false;
-    mp3Player.volume = 1;
+    document.querySelector('.player').muted = false;
+    document.querySelector('.player').volume = 1;
     setVolumeSlider();
     toggleMuteUnmute();
-    volumeSlider.style.backgroundSize = '100% 100%';
+    document.querySelector('.volume-slider').style.backgroundSize = '100% 100%';
   };
   const clickPlayButton = () => {
-    if (elems.length !== 0) {
-      mp3Player.play();
+    if (0 !== elems.length) {
+      document.querySelector('.player').play();
       for (let i = 0; i < elems.length; i++) {
         if (elems[i].classList.contains('active')) {
           setNowPlaying(elems[i].children[0]);
@@ -200,7 +190,7 @@ function edit(_ref) {
     }
   };
   const clickPauseButton = () => {
-    mp3Player.pause();
+    document.querySelector('.player').pause();
     setPause();
   };
   const onEndTRack = () => {
@@ -213,13 +203,15 @@ function edit(_ref) {
     changeTrack('prev');
   };
   const loadMetaData = event => {
-    totalTime.innerHTML = convertElapsedTime(event.target.duration);
-    currentTime.innerHTML = convertElapsedTime(event.target.currentTime);
+    document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration);
+    document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
+    let seekSlider = document.querySelector('.seek-slider');
     seekSlider.max = event.target.duration;
     seekSlider.setAttribute('value', event.target.currentTime);
   };
   const timeUpdate = event => {
-    currentTime.innerHTML = convertElapsedTime(event.target.currentTime);
+    document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
+    let seekSlider = document.querySelector('.seek-slider');
     seekSlider.setAttribute('value', event.target.currentTime);
     seekSlider.value = event.target.currentTime;
     const min = seekSlider.min;
@@ -228,10 +220,10 @@ function edit(_ref) {
     seekSlider.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
   };
   const onChangeSlider = event => {
-    mp3Player.currentTime = event.target.value;
+    document.querySelector('.player').currentTime = event.target.value;
   };
   const changeVolume = event => {
-    mp3Player.volume = event.target.value;
+    document.querySelector('.player').volume = event.target.value;
     const min = event.target.min;
     const max = event.target.max;
     const val = event.target.value;
@@ -246,8 +238,8 @@ function edit(_ref) {
   };
   const onClickTrack = event => {
     event.preventDefault();
-    mp3Player.src = event.target.href;
-    mp3Player.load();
+    document.querySelector('.player').src = event.target.href;
+    document.querySelector('.player').load();
     clickPlayButton();
     setNowPlaying(event.target);
     for (let i = 0; i < elems.length; i++) {
@@ -260,7 +252,7 @@ function edit(_ref) {
   const audioPlayer = tracks.map((track, index) => {
     if (index === 0) return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("audio", {
       key: index,
-      id: "player",
+      className: "player",
       onEnded: () => onEndTRack(),
       onTimeUpdate: event => timeUpdate(event),
       onLoadedMetadata: event => loadMetaData(event)
@@ -322,17 +314,17 @@ function edit(_ref) {
     className: "player-container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks, {
     template: ALBUM_TEMPLATE,
-    templateLock: "all"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "mp3__buttons"
-  }, audioPlayer, nowPlaying, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "volume-container"
+    templateLock: "insert"
+  }), audioPlayer, nowPlaying, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "volume-container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "volume-show"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "volume-slider",
     hidden: true
   }, "Volume"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     onChange: event => changeVolume(event),
-    id: "volume-slider",
+    className: "volume-slider",
     type: "range",
     min: "0",
     max: "1",
@@ -343,7 +335,7 @@ function edit(_ref) {
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     title: "Mute volume",
     onClick: () => clickMuteButton(),
-    id: "vol-mute-btn",
+    className: "vol-mute-btn",
     "aria-labelledby": "vol-mute-label"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-volumeon"
@@ -352,20 +344,18 @@ function edit(_ref) {
     hidden: true
   }, "Mute volume")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     title: "Unmute volume",
-    className: "display-none",
+    className: "vol-muted-btn display-none",
     onClick: () => clickUnMuteButton(),
-    id: "vol-muted-btn",
     "aria-labelledby": "vol-muted-label"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-volumeoff"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     id: "vol-muted-label",
     hidden: true
-  }, "Unmute volume"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "repeat"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "Unmute volume"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: () => clickRepeatButton(),
     title: "Repeat all",
+    className: "repeat",
     "aria-labelledby": "vol-repeat-label"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-repeat"
@@ -373,14 +363,13 @@ function edit(_ref) {
     id: "vol-repeat-label",
     hidden: true
   }, "Repeat all"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "seek-container",
-    className: "left"
+    className: "seek-container left"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "seek-slider",
     hidden: true
   }, "Seek"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     onChange: event => onChangeSlider(event),
-    id: "seek-slider",
+    className: "seek-slider",
     type: "range",
     min: "0",
     step: "0.01",
@@ -390,11 +379,11 @@ function edit(_ref) {
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "right"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    id: "current-time"
+    className: "current-time"
   }), " / ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    id: "total-time"
+    className: "total-time"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "play-pause-container"
+    className: "play-pause-container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: () => clickPrevButton(),
     title: "Previous track",
@@ -408,7 +397,7 @@ function edit(_ref) {
   }, "Previous track")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: () => clickPlayButton(),
     title: "Play",
-    id: "play-button",
+    className: "play-button",
     "aria-labelledby": "play-label",
     type: "button"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -419,9 +408,8 @@ function edit(_ref) {
   }, "Play")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: () => clickPauseButton(),
     title: "Pause",
-    id: "pause-button",
     "aria-labelledby": "pause-label",
-    className: "display-none",
+    className: "pause-button display-none",
     type: "button"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-pause"
@@ -431,7 +419,6 @@ function edit(_ref) {
   }, "Pause")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: () => clickNextButton(),
     title: "Next track",
-    id: "next-button",
     "aria-labelledby": "next-label",
     type: "button"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -439,9 +426,8 @@ function edit(_ref) {
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     id: "next-label",
     hidden: true
-  }, "Next track")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", {
-    id: "playlist",
-    className: "mp3-album__tracks"
+  }, "Next track"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", {
+    className: "playlist"
   }, trackItems, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
     onSelect: media => onTrackChange(tracks.length, media),
     allowedTypes: ['audio/mpeg'],
@@ -536,7 +522,7 @@ function save(_ref) {
   const audioPlayer = tracks.map((track, index) => {
     if (index === 0) return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("audio", {
       key: index,
-      id: "player",
+      className: "player",
       onEnded: "onEndTRack()",
       onTimeUpdate: "timeUpdate(event)",
       onLoadedMetadata: "loadMetaData(event)"
@@ -553,18 +539,21 @@ function save(_ref) {
     }, "01 - ", track.title);
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "player-container"
+    className: "player-container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)), audioPlayer, nowPlaying, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "volume-container"
+    className: "volume-container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "volume-show"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "volume-slider",
     hidden: true
   }, "Volume"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     onMouseMove: "changeVolume(event)",
-    id: "volume-slider",
+    className: "volume-slider",
     type: "range",
     min: "0",
     max: "1",
+    value: "1",
     step: "0.1",
     autoComplete: "off",
     role: "slider",
@@ -572,7 +561,7 @@ function save(_ref) {
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     title: "Mute volume",
     onClick: "clickMuteButton()",
-    id: "vol-mute-btn",
+    className: "vol-mute-btn",
     "aria-labelledby": "vol-mute-label"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-volumeon"
@@ -581,20 +570,18 @@ function save(_ref) {
     hidden: true
   }, "Mute volume")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     title: "Unmute volume",
-    className: "display-none",
+    className: "vol-muted-btn display-none",
     onClick: "clickUnMuteButton()",
-    id: "vol-muted-btn",
     "aria-labelledby": "vol-muted-label"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-volumeoff"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     id: "vol-muted-label",
     hidden: true
-  }, "Unmute volume"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "repeat"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "Unmute volume"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: "clickRepeatButton()",
     title: "Repeat all",
+    className: "repeat",
     "aria-labelledby": "vol-repeat-label"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-repeat"
@@ -602,14 +589,13 @@ function save(_ref) {
     id: "vol-repeat-label",
     hidden: true
   }, "Repeat all"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "seek-container",
-    className: "left"
+    className: "seek-container left"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "seek-slider",
     hidden: true
   }, "Seek"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     onChange: "onChangeSlider(event)",
-    id: "seek-slider",
+    className: "seek-slider",
     type: "range",
     min: "0",
     step: "0.01",
@@ -619,11 +605,11 @@ function save(_ref) {
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "right"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    id: "current-time"
+    className: "current-time"
   }), " / ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    id: "total-time"
+    className: "total-time"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    id: "play-pause-container"
+    className: "play-pause-container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: "clickPrevButton()",
     title: "Previous track",
@@ -637,7 +623,7 @@ function save(_ref) {
   }, "Previous track")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: "clickPlayButton()",
     title: "Play",
-    id: "play-button",
+    className: "play-button",
     "aria-labelledby": "play-label",
     type: "button"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -648,9 +634,8 @@ function save(_ref) {
   }, "Play")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: "clickPauseButton()",
     title: "Pause",
-    id: "pause-button",
+    className: "pause-button display-none",
     "aria-labelledby": "pause-label",
-    className: "display-none",
     type: "button"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-controls-pause"
@@ -660,7 +645,6 @@ function save(_ref) {
   }, "Pause")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: "clickNextButton()",
     title: "Next track",
-    id: "next-button",
     "aria-labelledby": "next-label",
     type: "button"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -669,8 +653,7 @@ function save(_ref) {
     id: "next-label",
     hidden: true
   }, "Next track"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", {
-    id: "playlist",
-    className: "mp3-album__tracks"
+    className: "playlist"
   }, trackItems));
 }
 

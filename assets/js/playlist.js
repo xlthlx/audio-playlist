@@ -1,24 +1,31 @@
-const nowPLaying = document.getElementsByClassName("playing")[0],
-	mp3Player = document.getElementById("player"),
-	playlist = document.getElementById("playlist"),
-	playButton = document.getElementById("play-button"),
-	pauseButton = document.getElementById("pause-button"),
-	currentTime = document.getElementById("current-time"),
-	totalTime = document.getElementById("total-time"),
-	seekSlider = document.getElementById("seek-slider"),
-	volMuteButton = document.getElementById("vol-mute-btn"),
-	volMutedButton = document.getElementById("vol-muted-btn"),
-	volumeSlider = document.getElementById("volume-slider"),
-	svgRepeat = document.getElementsByClassName('dashicons-controls-repeat')[0]
-
 let elems
 
+let playlist = document.querySelector('.playlist')
 if (playlist && playlist.length !== 0) {
 	elems = playlist.getElementsByClassName('track')
 }
 
+let svgRepeat = document.querySelector('.dashicons-controls-repeat')
+
 if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
 	svgRepeat.classList.add('on')
+}
+
+const onTrackChange = (index, media) => {
+	const updatedTracks = [...tracks]
+	updatedTracks[index] = {
+		url: media.url,
+		title: media.title,
+		artist: media.artist,
+		duration: media.fileLength,
+	}
+	setAttributes({ tracks: updatedTracks })
+}
+
+const onDeleteTrack = (index) => {
+	const updatedTracks = [...tracks]
+	updatedTracks.splice(index, 1)
+	setAttributes({ tracks: updatedTracks })
 }
 
 const convertElapsedTime = (inputSeconds) => {
@@ -31,17 +38,17 @@ const convertElapsedTime = (inputSeconds) => {
 }
 
 const setSource = (i) => {
-	if (elems.length !== 0) {
-		mp3Player.src = elems[i].children[0].getAttribute('href')
-		mp3Player.load()
-		playButton.click()
+	if (0 !== elems.length) {
+		document.querySelector('.player').src = elems[i].children[0].getAttribute('href')
+		document.querySelector('.player').load()
+		document.querySelector('.play-button').click()
 	}
 }
 
 const setNowPlaying = (item) => {
 	let num = item.dataset.num
 	let title = item.dataset.title
-	nowPLaying.textContent = num + ' - ' + title
+	document.querySelector('.playing').textContent = num + ' - ' + title
 }
 
 const setFirstTrack = (elems) => {
@@ -106,43 +113,43 @@ const changeTrack = (direction) => {
 }
 
 const setPause = () => {
-	playButton.classList.remove('display-none')
-	pauseButton.classList.add('display-none')
+	document.querySelector('.play-button').classList.remove('display-none')
+	document.querySelector('.pause-button').classList.add('display-none')
 }
 
 const setPlay = () => {
-	playButton.classList.add('display-none')
-	pauseButton.classList.remove('display-none')
+	document.querySelector('.play-button').classList.add('display-none')
+	document.querySelector('.pause-button').classList.remove('display-none')
 }
 
 const toggleMuteUnmute = () => {
-	volMutedButton.classList.toggle('display-none')
-	volMuteButton.classList.toggle('display-none')
+	document.querySelector('.vol-muted-btn').classList.toggle('display-none')
+	document.querySelector('.vol-mute-btn').classList.toggle('display-none')
 }
 
 const setVolumeSlider = () => {
-	volumeSlider.value = mp3Player.volume
+	document.querySelector('.volume-slider').value = document.querySelector('.player').volume
 }
 
 const clickMuteButton = () => {
-	mp3Player.muted = true
-	mp3Player.volume = 0
+	document.querySelector('.player').muted = true
+	document.querySelector('.player').volume = 0
 	setVolumeSlider()
 	toggleMuteUnmute()
-	volumeSlider.style.backgroundSize = '0% 100%'
+	document.querySelector('.volume-slider').style.backgroundSize = '0% 100%'
 }
 
 const clickUnMuteButton = () => {
-	mp3Player.muted = false
-	mp3Player.volume = 1
+	document.querySelector('.player').muted = false
+	document.querySelector('.player').volume = 1
 	setVolumeSlider()
 	toggleMuteUnmute()
-	volumeSlider.style.backgroundSize = '100% 100%'
+	document.querySelector('.volume-slider').style.backgroundSize = '100% 100%'
 }
 
 const clickPlayButton = () => {
-	if (elems.length !== 0) {
-		mp3Player.play()
+	if (0 !== elems.length) {
+		document.querySelector('.player').play()
 		for (let i = 0; i < elems.length; i++) {
 			if (elems[i].classList.contains('active')) {
 				setNowPlaying(elems[i].children[0])
@@ -152,7 +159,7 @@ const clickPlayButton = () => {
 	}
 }
 const clickPauseButton = () => {
-	mp3Player.pause()
+	document.querySelector('.player').pause()
 	setPause()
 }
 
@@ -169,14 +176,16 @@ const clickPrevButton = () => {
 }
 
 const loadMetaData = (event) => {
-	totalTime.innerHTML = convertElapsedTime(event.target.duration)
-	currentTime.innerHTML = convertElapsedTime(event.target.currentTime)
+	document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration)
+	document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
+	let seekSlider = document.querySelector('.seek-slider')
 	seekSlider.max = event.target.duration
 	seekSlider.setAttribute('value', event.target.currentTime)
 }
 
 const timeUpdate = (event) => {
-	currentTime.innerHTML = convertElapsedTime(event.target.currentTime)
+	document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
+	let seekSlider = document.querySelector('.seek-slider')
 	seekSlider.setAttribute('value', event.target.currentTime)
 	seekSlider.value = event.target.currentTime
 
@@ -188,11 +197,11 @@ const timeUpdate = (event) => {
 }
 
 const onChangeSlider = (event) => {
-	mp3Player.currentTime = event.target.value
+	document.querySelector('.player').currentTime = event.target.value
 }
 
 const changeVolume = (event) => {
-	mp3Player.volume = event.target.value
+	document.querySelector('.player').volume = event.target.value
 
 	const min = event.target.min
 	const max = event.target.max
@@ -213,8 +222,8 @@ const clickRepeatButton = () => {
 const onClickTrack = (event) => {
 	event.preventDefault()
 
-	mp3Player.src = event.target.href
-	mp3Player.load()
+	document.querySelector('.player').src = event.target.href
+	document.querySelector('.player').load()
 
 	clickPlayButton()
 	setNowPlaying(event.target)
