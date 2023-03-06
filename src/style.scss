@@ -100,8 +100,12 @@ $color_5: #AAAAAA;
 	border-radius: 5px;
 	background: $color_3;
 	background-image: linear-gradient($color_2, $color_2);
-	background-size: 0 100%;
+	background-size: 100% 100%;
 	background-repeat: no-repeat;
+
+	&.seek-slider {
+	  background-size: 0 100%;
+	}
 
 	&::-webkit-slider-thumb {
 	  -webkit-appearance: none;
@@ -164,7 +168,7 @@ $color_5: #AAAAAA;
 
   .playing {
 	overflow: hidden;
-	max-width: 20ch;
+	max-width: 25ch;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	float: left;

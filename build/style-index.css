@@ -84,8 +84,11 @@
   border-radius: 5px;
   background: #EEEEEE;
   background-image: linear-gradient(black, black);
-  background-size: 0 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
+}
+.player-container input[type=range].seek-slider {
+  background-size: 0 100%;
 }
 .player-container input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -143,7 +146,7 @@
 }
 .player-container .playing {
   overflow: hidden;
-  max-width: 20ch;
+  max-width: 25ch;
   text-overflow: ellipsis;
   white-space: nowrap;
   float: left;

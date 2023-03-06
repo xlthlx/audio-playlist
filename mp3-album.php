@@ -19,11 +19,18 @@
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
 function create_block_mp3_album_block_init() {
-	register_block_type( __DIR__ . '/build');
+	register_block_type( __DIR__ . '/build' );
 }
+
 add_action( 'init', 'create_block_mp3_album_block_init' );
 
 function playlist_scripts() {
 	wp_enqueue_script( 'playlist-js', plugins_url( 'assets/js/playlist.js', __FILE__ ), array(), '1.0.0', true );
 }
+
 add_action( 'wp_enqueue_scripts', 'playlist_scripts' );
+
+wp_add_inline_script( 'wp-block-editor',
+	'const MP3_PLUGIN = ' . json_encode( array(
+		'url' => plugins_url( '', __FILE__ ),
+	), JSON_THROW_ON_ERROR ) );

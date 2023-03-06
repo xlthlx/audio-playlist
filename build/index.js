@@ -45,7 +45,7 @@ function edit(_ref) {
     level: 3
   }]];
   const prepZero = number => {
-    if (number < 9) return '0' + number;else return number;
+    if (number <= 9) return '0' + number;else return number;
   };
   let elems;
   let playlist = document.querySelector('.playlist');
@@ -56,6 +56,21 @@ function edit(_ref) {
   if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
     svgRepeat.classList.add('on');
   }
+  const onTracksUpload = media => {
+    const updatedTracks = [...tracks];
+    for (let index = 0; index < media.length; index++) {
+      let num = tracks.length + index;
+      updatedTracks[num] = {
+        url: media[index].url,
+        title: media[index].title,
+        artist: media[index].artist,
+        duration: media[index].fileLength
+      };
+    }
+    setAttributes({
+      tracks: updatedTracks
+    });
+  };
   const onTrackChange = (index, media) => {
     const updatedTracks = [...tracks];
     updatedTracks[index] = {
@@ -84,7 +99,7 @@ function edit(_ref) {
     return minutes + ':' + seconds;
   };
   const setSource = i => {
-    if (0 !== elems.length) {
+    if (0 > elems.length) {
       document.querySelector('.player').src = elems[i].children[0].getAttribute('href');
       document.querySelector('.player').load();
       document.querySelector('.play-button').click();
@@ -205,6 +220,7 @@ function edit(_ref) {
   const loadMetaData = event => {
     document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration);
     document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
+    document.querySelector('.time-sep').innerHTML = ' / ';
     let seekSlider = document.querySelector('.seek-slider');
     seekSlider.max = event.target.duration;
     seekSlider.setAttribute('value', event.target.currentTime);
@@ -223,7 +239,10 @@ function edit(_ref) {
     document.querySelector('.player').currentTime = event.target.value;
   };
   const changeVolume = event => {
-    document.querySelector('.player').volume = event.target.value;
+    let mp3Player = document.querySelector('.player');
+    if (mp3Player) {
+      mp3Player.volume = event.target.value;
+    }
     const min = event.target.min;
     const max = event.target.max;
     const val = event.target.value;
@@ -373,6 +392,7 @@ function edit(_ref) {
     type: "range",
     min: "0",
     step: "0.01",
+    value: "0",
     autoComplete: "off",
     role: "slider",
     "aria-label": "Seek"
@@ -380,7 +400,9 @@ function edit(_ref) {
     className: "right"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "current-time"
-  }), " / ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "time-sep"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "total-time"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "play-pause-container"
@@ -429,8 +451,11 @@ function edit(_ref) {
   }, "Next track"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", {
     className: "playlist"
   }, trackItems, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
-    onSelect: media => onTrackChange(tracks.length, media),
+    onSelect: media => onTracksUpload(media),
     allowedTypes: ['audio/mpeg'],
+    multiple: true,
+    title: 'Select or Upload mp3 audio',
+    value: tracks.map(media => media.url),
     render: _ref3 => {
       let {
         open
@@ -438,7 +463,7 @@ function edit(_ref) {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
         className: "is-primary right",
         onClick: open
-      }, "Add track");
+      }, "Add tracks");
     }
   }))))));
 }
@@ -464,6 +489,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_1__.name, {
+  example: {
+    'innerBlocks': [{
+      'name': 'core/image',
+      'attributes': {
+        'url': MP3_PLUGIN.url + '/assets/img/cover.jpg',
+        'align': 'center',
+        'style': {
+          'border': {
+            'radius': '5px'
+          }
+        }
+      }
+    }, {
+      'name': 'core/heading',
+      'attributes': {
+        'level': '3',
+        'content': 'Album Title',
+        'textAlign': 'center'
+      }
+    }]
+  },
   /**
    * @see ./edit.js
    */
@@ -729,7 +775,7 @@ module.exports = window["wp"]["element"];
   \************************/
 /***/ (function(module) {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"xlthlx/mp3-album","version":"0.1.0","title":"Mp3 Album","category":"media","icon":"playlist-audio","description":"Create and show your album with mp3 list.","keywords":["mp3","playlist","list","album","cover"],"supports":{"html":true,"className":true,"multiple":false,"color":{"text":true,"background":true,"link":true},"example":{}},"textdomain":"mp3-album","attributes":{"tracks":{"selector":"li","type":"array","default":[]}},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"xlthlx/mp3-album","version":"0.1.0","title":"Mp3 Album","category":"media","icon":"playlist-audio","description":"Create and show your album with mp3 list.","keywords":["mp3","playlist","list","album","cover"],"supports":{"html":true,"className":true,"multiple":true,"color":{"text":true,"background":true,"link":true}},"textdomain":"mp3-album","attributes":{"tracks":{"selector":"li","type":"array","default":[]}},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

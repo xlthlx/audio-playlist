@@ -19,6 +19,9 @@
   background-color: transparent;
   color: initial;
 }
+.player-container figcaption {
+  display: block !important;
+}
 .player-container .dashicons.dashicons-trash {
   width: 27px;
   height: 27px;

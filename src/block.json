@@ -17,13 +17,12 @@
   "supports": {
 	"html": true,
 	"className": true,
-	"multiple": false,
+	"multiple": true,
 	"color": {
 	  "text": true,
 	  "background": true,
 	  "link": true
-	},
-	"example": {}
+	}
   },
   "textdomain": "mp3-album",
   "attributes": {

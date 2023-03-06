@@ -11,7 +11,7 @@ export default function edit ({ attributes, setAttributes }) {
 	]
 
 	const prepZero = (number) => {
-		if (number < 9)
+		if (number <= 9)
 			return '0' + number
 		else
 			return number
@@ -28,6 +28,20 @@ export default function edit ({ attributes, setAttributes }) {
 
 	if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
 		svgRepeat.classList.add('on')
+	}
+
+	const onTracksUpload = (media) => {
+		const updatedTracks = [...tracks]
+		for (let index = 0; index < media.length; index++) {
+			let num = tracks.length + index
+			updatedTracks[num] = {
+				url: media[index].url,
+				title: media[index].title,
+				artist: media[index].artist,
+				duration: media[index].fileLength,
+			}
+		}
+		setAttributes({ tracks: updatedTracks })
 	}
 
 	const onTrackChange = (index, media) => {
@@ -57,7 +71,7 @@ export default function edit ({ attributes, setAttributes }) {
 	}
 
 	const setSource = (i) => {
-		if (0 !== elems.length) {
+		if (0 > elems.length) {
 			document.querySelector('.player').src = elems[i].children[0].getAttribute('href')
 			document.querySelector('.player').load()
 			document.querySelector('.play-button').click()
@@ -197,6 +211,7 @@ export default function edit ({ attributes, setAttributes }) {
 	const loadMetaData = (event) => {
 		document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration)
 		document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
+		document.querySelector('.time-sep').innerHTML = ' / '
 		let seekSlider = document.querySelector('.seek-slider')
 		seekSlider.max = event.target.duration
 		seekSlider.setAttribute('value', event.target.currentTime)
@@ -220,7 +235,10 @@ export default function edit ({ attributes, setAttributes }) {
 	}
 
 	const changeVolume = (event) => {
-		document.querySelector('.player').volume = event.target.value
+		let mp3Player = document.querySelector('.player')
+		if (mp3Player) {
+			mp3Player.volume = event.target.value
+		}
 
 		const min = event.target.min
 		const max = event.target.max
@@ -319,8 +337,8 @@ export default function edit ({ attributes, setAttributes }) {
 
 					<div className="volume-show">
 						<label htmlFor="volume-slider" hidden>Volume</label>
-						<input onChange={event => changeVolume(event)} className="volume-slider" type="range" min="0" max="1"
-									 step="0.1"
+						<input onChange={event => changeVolume(event)} className="volume-slider"
+									 type="range" min="0" max="1" step="0.1"
 									 autoComplete="off" role="slider" aria-label="Volume"/>
 
 						<button title="Mute volume" onClick={() => clickMuteButton()}
@@ -347,10 +365,11 @@ export default function edit ({ attributes, setAttributes }) {
 				<div className="seek-container left">
 					<label htmlFor="seek-slider" hidden>Seek</label>
 					<input onChange={event => onChangeSlider(event)} className="seek-slider" type="range" min="0" step="0.01"
-								 autoComplete="off" role="slider" aria-label="Seek"/>
+								 value="0" autoComplete="off" role="slider" aria-label="Seek"/>
 				</div>
 
-				<div className="right"><span className="current-time"></span> / <span className="total-time"></span></div>
+				<div className="right"><span className="current-time"></span><span className="time-sep"></span><span
+					className="total-time"></span></div>
 
 				<div className="play-pause-container">
 
@@ -382,11 +401,14 @@ export default function edit ({ attributes, setAttributes }) {
 					<li>
 						<MediaUploadCheck>
 							<MediaUpload
-								onSelect={(media) => onTrackChange(tracks.length, media)}
+								onSelect={(media) => onTracksUpload(media)}
 								allowedTypes={['audio/mpeg']}
+								multiple={true}
+								title={'Select or Upload mp3 audio'}
+								value={tracks.map(media => media.url)}
 								render={({ open }) =>
 									<Button className="is-primary right" onClick={open}>
-										Add track
+										Add tracks
 									</Button>
 								}
 							/>

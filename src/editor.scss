@@ -19,6 +19,10 @@
 	}
   }
 
+  figcaption {
+	display: block !important;
+  }
+
   .dashicons {
 	&.dashicons-trash {
 	  width: 27px;
