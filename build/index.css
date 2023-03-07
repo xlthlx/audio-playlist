@@ -12,12 +12,12 @@
   border: none;
   box-shadow: none;
   background-color: transparent;
+  vertical-align: text-bottom;
 }
 .player-container .components-button.action.is-small:hover {
   border: none;
   box-shadow: none;
   background-color: transparent;
-  color: initial;
 }
 .player-container figcaption {
   display: block !important;
@@ -29,7 +29,7 @@
   padding: 6px 6px 6px 0;
 }
 .player-container .dashicons.dashicons-edit {
-  margin-left: 10px;
+  margin-left: 6px;
   padding-left: 6px;
 }
 

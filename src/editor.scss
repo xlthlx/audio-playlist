@@ -10,12 +10,11 @@
 	border: none;
 	box-shadow: none;
 	background-color: transparent;
-
+	vertical-align: text-bottom;
 	&:hover {
 	  border: none;
 	  box-shadow: none;
 	  background-color: transparent;
-	  color: initial;
 	}
   }
 
@@ -32,11 +31,10 @@
 	}
 
 	&.dashicons-edit {
-	  margin-left: 10px;
+	  margin-left: 6px;
 	  padding-left: 6px;
 	}
   }
-
 }
 
 ol.playlist {

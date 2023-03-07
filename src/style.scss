@@ -16,7 +16,7 @@ $color_3: #EEEEEE;
 $color_4: #555555;
 $color_5: #AAAAAA;
 
-.wp-block-xlthlx-mp3-album {
+.wp-block-xlthlx-audio-playlist {
   text-align: center;
 
   .wp-block-image.aligncenter {
@@ -45,7 +45,7 @@ $color_5: #AAAAAA;
 	display: none;
   }
 
-  button {
+  button:not(.components-button) {
 	cursor: pointer;
 	border: 1px solid $color_3;
 	border-radius: 5px;

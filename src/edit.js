@@ -1,13 +1,13 @@
-import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor'
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor'
-import { Button } from '@wordpress/components'
+import {MediaUpload, MediaUploadCheck} from '@wordpress/block-editor'
+import {InnerBlocks, useBlockProps} from '@wordpress/block-editor'
+import {Button} from '@wordpress/components'
 import './editor.scss'
 
-export default function edit ({ attributes, setAttributes }) {
-	const { tracks } = attributes
-	const ALBUM_TEMPLATE = [
-		['core/image', { align: 'center', style: { 'border': { 'radius': '5px' } } }],
-		['core/heading', { placeholder: 'Album title', textAlign: 'center', level: 3 }]
+export default function edit({attributes, setAttributes}) {
+	const {tracks} = attributes
+	const PLAYLIST_TEMPLATE = [
+		['core/image', {align: 'center', style: {'border': {'radius': '5px'}}}],
+		['core/heading', {placeholder: 'Playlist title', textAlign: 'center', level: 3}]
 	]
 
 	const prepZero = (number) => {
@@ -37,11 +37,12 @@ export default function edit ({ attributes, setAttributes }) {
 			updatedTracks[num] = {
 				url: media[index].url,
 				title: media[index].title,
-				artist: media[index].artist,
+				artist: media[index].meta.artist,
 				duration: media[index].fileLength,
+				trackid: media[index].id,
 			}
 		}
-		setAttributes({ tracks: updatedTracks })
+		setAttributes({tracks: updatedTracks})
 	}
 
 	const onTrackChange = (index, media) => {
@@ -49,16 +50,17 @@ export default function edit ({ attributes, setAttributes }) {
 		updatedTracks[index] = {
 			url: media.url,
 			title: media.title,
-			artist: media.artist,
+			artist: media.meta.artist,
 			duration: media.fileLength,
+			trackid: media.id,
 		}
-		setAttributes({ tracks: updatedTracks })
+		setAttributes({tracks: updatedTracks})
 	}
 
 	const onDeleteTrack = (index) => {
 		const updatedTracks = [...tracks]
 		updatedTracks.splice(index, 1)
-		setAttributes({ tracks: updatedTracks })
+		setAttributes({tracks: updatedTracks})
 	}
 
 	const convertElapsedTime = (inputSeconds) => {
@@ -276,8 +278,9 @@ export default function edit ({ attributes, setAttributes }) {
 	const audioPlayer = tracks.map((track, index) => {
 		if (index === 0)
 			return (
-				<audio key={index} className="player" onEnded={() => onEndTRack()} onTimeUpdate={event => timeUpdate(event)}
-							 onLoadedMetadata={event => loadMetaData(event)}>
+				<audio key={index} className="player" onEnded={() => onEndTRack()}
+					   onTimeUpdate={event => timeUpdate(event)}
+					   onLoadedMetadata={event => loadMetaData(event)}>
 					<source src={track.url} type="audio/mpeg"/>
 					<p>
 						Your browser does not support HTML audio, but you can still
@@ -301,16 +304,16 @@ export default function edit ({ attributes, setAttributes }) {
 			<li key={index} className={classActive}>
 				{track.url && (
 					<a href={track.url} className="item" onClick={event => onClickTrack(event)}
-						 data-num={number} data-length={track.duration} data-title={track.title}>
+					   data-id={track.trackid} data-num={number} data-length={track.duration} data-title={track.title}>
 						{number} - {track.title} - {track.artist}<span className="right">{track.duration}</span>
 					</a>
 				)}
 				<MediaUploadCheck>
 					<MediaUpload
 						onSelect={(media) => onTrackChange(index, media)}
-						allowedTypes={['audio/mpeg']}
+						allowedTypes={['audio']}
 						value={track}
-						render={({ open }) => (
+						render={({open}) => (
 							<Button title="Edit" className="action" isSmall onClick={open}>
 								<span className="dashicons dashicons-edit"></span>
 							</Button>
@@ -328,7 +331,7 @@ export default function edit ({ attributes, setAttributes }) {
 		<div {...useBlockProps()}>
 			<div className="player-container">
 				<InnerBlocks
-					template={ALBUM_TEMPLATE}
+					template={PLAYLIST_TEMPLATE}
 					templateLock="insert"
 				/>
 				{audioPlayer}
@@ -338,24 +341,25 @@ export default function edit ({ attributes, setAttributes }) {
 					<div className="volume-show">
 						<label htmlFor="volume-slider" hidden>Volume</label>
 						<input onChange={event => changeVolume(event)} className="volume-slider"
-									 type="range" min="0" max="1" step="0.1"
-									 autoComplete="off" role="slider" aria-label="Volume"/>
+							   type="range" min="0" max="1" step="0.1"
+							   autoComplete="off" role="slider" aria-label="Volume"/>
 
 						<button title="Mute volume" onClick={() => clickMuteButton()}
-										className="vol-mute-btn" aria-labelledby="vol-mute-label">
+								className="vol-mute-btn" aria-labelledby="vol-mute-label">
 							<span className="dashicons dashicons-controls-volumeon"></span>
 							<span id="vol-mute-label" hidden>Mute volume</span>
 						</button>
 
-						<button title="Unmute volume" className="vol-muted-btn display-none" onClick={() => clickUnMuteButton()}
-										aria-labelledby="vol-muted-label">
+						<button title="Unmute volume" className="vol-muted-btn display-none"
+								onClick={() => clickUnMuteButton()}
+								aria-labelledby="vol-muted-label">
 							<span className="dashicons dashicons-controls-volumeoff"></span>
 							<span id="vol-muted-label" hidden>Unmute volume</span>
 						</button>
 					</div>
 
 					<button onClick={() => clickRepeatButton()} title="Repeat all" className="repeat"
-									aria-labelledby="vol-repeat-label">
+							aria-labelledby="vol-repeat-label">
 						<span className="dashicons dashicons-controls-repeat"></span>
 						<span id="vol-repeat-label" hidden>Repeat all</span>
 					</button>
@@ -364,8 +368,9 @@ export default function edit ({ attributes, setAttributes }) {
 
 				<div className="seek-container left">
 					<label htmlFor="seek-slider" hidden>Seek</label>
-					<input onChange={event => onChangeSlider(event)} className="seek-slider" type="range" min="0" step="0.01"
-								 value="0" autoComplete="off" role="slider" aria-label="Seek"/>
+					<input onChange={event => onChangeSlider(event)} className="seek-slider" type="range" min="0"
+						   step="0.01"
+						   value="0" autoComplete="off" role="slider" aria-label="Seek"/>
 				</div>
 
 				<div className="right"><span className="current-time"></span><span className="time-sep"></span><span
@@ -373,24 +378,27 @@ export default function edit ({ attributes, setAttributes }) {
 
 				<div className="play-pause-container">
 
-					<button onClick={() => clickPrevButton()} title="Previous track" aria-labelledby="prev-label" type="button">
+					<button onClick={() => clickPrevButton()} title="Previous track" aria-labelledby="prev-label"
+							type="button">
 						<span className="dashicons dashicons-controls-back"></span>
 						<span id="prev-label" hidden>Previous track</span>
 					</button>
 
-					<button onClick={() => clickPlayButton()} title="Play" className="play-button" aria-labelledby="play-label"
-									type="button">
+					<button onClick={() => clickPlayButton()} title="Play" className="play-button"
+							aria-labelledby="play-label"
+							type="button">
 						<span className="dashicons dashicons-controls-play"></span>
 						<span id="play-label" hidden>Play</span>
 					</button>
 
 					<button onClick={() => clickPauseButton()} title="Pause" aria-labelledby="pause-label"
-									className="pause-button display-none" type="button">
+							className="pause-button display-none" type="button">
 						<span className="dashicons dashicons-controls-pause"></span>
 						<span id="pause-label" hidden>Pause</span>
 					</button>
 
-					<button onClick={() => clickNextButton()} title="Next track" aria-labelledby="next-label" type="button">
+					<button onClick={() => clickNextButton()} title="Next track" aria-labelledby="next-label"
+							type="button">
 						<span className="dashicons dashicons-controls-forward"></span>
 						<span id="next-label" hidden>Next track</span>
 					</button>
@@ -402,11 +410,11 @@ export default function edit ({ attributes, setAttributes }) {
 						<MediaUploadCheck>
 							<MediaUpload
 								onSelect={(media) => onTracksUpload(media)}
-								allowedTypes={['audio/mpeg']}
+								allowedTypes={['audio']}
 								multiple={true}
 								title={'Select or Upload mp3 audio'}
 								value={tracks.map(media => media.url)}
-								render={({ open }) =>
+								render={({open}) =>
 									<Button className="is-primary right" onClick={open}>
 										Add tracks
 									</Button>

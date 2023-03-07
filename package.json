@@ -1,8 +1,8 @@
 {
-  "name": "mp3-album",
+  "name": "audio-playlist",
   "version": "0.1.0",
-  "description": "Example block scaffolded with Create Block tool.",
-  "author": "The WordPress Contributors",
+  "description": "Create and show your audio playlist with player.",
+  "author": "xlthlx",
   "license": "GPL-2.0-or-later",
   "main": "build/index.js",
   "scripts": {
@@ -10,12 +10,13 @@
     "format": "wp-scripts format",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
+	"minify:js": "uglifyjs assets/js/playlist.js --compress --mangle --output assets/js/playlist.min.js",
     "packages-update": "wp-scripts packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
     "start": "wp-scripts start"
   },
   "devDependencies": {
-    "@wordpress/dom-ready": "^3.28.0",
-    "@wordpress/scripts": "^25.4.0"
+    "@wordpress/scripts": "^25.4.0",
+	"uglify-js": "^3.17.2"
   }
 }

@@ -11,23 +11,6 @@ if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
 	svgRepeat.classList.add('on')
 }
 
-const onTrackChange = (index, media) => {
-	const updatedTracks = [...tracks]
-	updatedTracks[index] = {
-		url: media.url,
-		title: media.title,
-		artist: media.artist,
-		duration: media.fileLength,
-	}
-	setAttributes({ tracks: updatedTracks })
-}
-
-const onDeleteTrack = (index) => {
-	const updatedTracks = [...tracks]
-	updatedTracks.splice(index, 1)
-	setAttributes({ tracks: updatedTracks })
-}
-
 const convertElapsedTime = (inputSeconds) => {
 	let seconds = Math.floor(inputSeconds % 60)
 	if (seconds < 10) {
@@ -58,7 +41,7 @@ const setFirstTrack = (elems) => {
 		setNowPlaying(elems[0].children[0])
 	} else {
 		elems[elems.length - 1].classList.add('active')
-		clickPauseButton()
+		document.querySelector('.pause-button').click()
 	}
 }
 
@@ -69,7 +52,7 @@ const setLastTrack = (elems) => {
 		setNowPlaying(elems[elems.length - 1].children[0])
 	} else {
 		elems[0].classList.add('active')
-		clickPauseButton()
+		document.querySelector('.pause-button').click()
 	}
 }
 
@@ -130,24 +113,23 @@ const toggleMuteUnmute = () => {
 const setVolumeSlider = () => {
 	document.querySelector('.volume-slider').value = document.querySelector('.player').volume
 }
-
-const clickMuteButton = () => {
+document.querySelector('.vol-mute-btn').addEventListener('click', function () {
 	document.querySelector('.player').muted = true
 	document.querySelector('.player').volume = 0
 	setVolumeSlider()
 	toggleMuteUnmute()
 	document.querySelector('.volume-slider').style.backgroundSize = '0% 100%'
-}
+})
 
-const clickUnMuteButton = () => {
+document.querySelector('.vol-muted-btn').addEventListener('click', function () {
 	document.querySelector('.player').muted = false
 	document.querySelector('.player').volume = 1
 	setVolumeSlider()
 	toggleMuteUnmute()
 	document.querySelector('.volume-slider').style.backgroundSize = '100% 100%'
-}
+})
 
-const clickPlayButton = () => {
+document.querySelector('.play-button').addEventListener('click', function () {
 	if (0 !== elems.length) {
 		document.querySelector('.player').play()
 		for (let i = 0; i < elems.length; i++) {
@@ -157,81 +139,88 @@ const clickPlayButton = () => {
 		}
 		setPlay()
 	}
-}
-const clickPauseButton = () => {
+})
+document.querySelector('.pause-button').addEventListener('click', function () {
 	document.querySelector('.player').pause()
 	setPause()
-}
-
-const onEndTRack = () => {
+})
+document.querySelector('.next-button').addEventListener('click', function () {
 	changeTrack('next')
-}
-
-const clickNextButton = () => {
-	changeTrack('next')
-}
-
-const clickPrevButton = () => {
+})
+document.querySelector('.prev-button').addEventListener('click', function () {
 	changeTrack('prev')
-}
+})
 
-const loadMetaData = (event) => {
-	document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration)
-	document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
-	let seekSlider = document.querySelector('.seek-slider')
-	seekSlider.max = event.target.duration
-	seekSlider.setAttribute('value', event.target.currentTime)
-}
+const audio_player = document.querySelector('.player')
 
-const timeUpdate = (event) => {
-	document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime)
+audio_player.addEventListener('loadedmetadata', function () {
+	document.querySelector('.total-time').innerHTML = convertElapsedTime(audio_player.duration)
+	document.querySelector('.current-time').innerHTML = convertElapsedTime(audio_player.currentTime)
+	document.querySelector('.time-sep').innerHTML = ' / '
 	let seekSlider = document.querySelector('.seek-slider')
-	seekSlider.setAttribute('value', event.target.currentTime)
-	seekSlider.value = event.target.currentTime
+	seekSlider.max = audio_player.duration
+	seekSlider.setAttribute('value', audio_player.currentTime)
+})
+
+audio_player.addEventListener('timeupdate', function () {
+	document.querySelector('.current-time').innerHTML = convertElapsedTime(audio_player.currentTime)
+	let seekSlider = document.querySelector('.seek-slider')
+	seekSlider.setAttribute('value', audio_player.currentTime)
+	seekSlider.value = audio_player.currentTime
 
 	const min = seekSlider.min
 	const max = seekSlider.max
 	const val = seekSlider.value
 
 	seekSlider.style.backgroundSize = ((val - min) * 100) / (max - min) + '% 100%'
-}
+})
 
-const onChangeSlider = (event) => {
-	document.querySelector('.player').currentTime = event.target.value
-}
+audio_player.addEventListener('ended', function () {
+	changeTrack('next')
+})
+document.querySelector('.seek-slider').addEventListener('input', function () {
+	audio_player.currentTime = document.querySelector('.seek-slider').value
+})
 
-const changeVolume = (event) => {
-	document.querySelector('.player').volume = event.target.value
+const volSlider = document.querySelector('.volume-slider')
+volSlider.addEventListener('mousemove', function () {
+	audio_player.volume = volSlider.value
 
-	const min = event.target.min
-	const max = event.target.max
-	const val = event.target.value
+	const min = volSlider.min
+	const max = volSlider.max
+	const val = volSlider.value
 
-	event.target.style.backgroundSize = ((val - min) * 100) / (max - min) + '% 100%'
-}
+	volSlider.style.backgroundSize = ((val - min) * 100) / (max - min) + '% 100%'
+})
 
-const clickRepeatButton = () => {
+document.querySelector('.repeat').addEventListener('click', function () {
 	svgRepeat.classList.toggle('on')
 	localStorage.setItem('repeat', '')
 
 	if (svgRepeat.classList.contains('on')) {
 		localStorage.setItem('repeat', 'true')
 	}
-}
+})
 
-const onClickTrack = (event) => {
-	event.preventDefault()
+document.querySelectorAll('.item').forEach((item) => {
+	item.addEventListener('click', (event) => {
+		event.preventDefault()
 
-	document.querySelector('.player').src = event.target.href
-	document.querySelector('.player').load()
-
-	clickPlayButton()
-	setNowPlaying(event.target)
-
-	for (let i = 0; i < elems.length; i++) {
-		if (elems[i].classList.contains('active')) {
-			elems[i].classList.remove('active')
+		document.querySelector('.player').src = item.href
+		document.querySelector('.player').load()
+		document.querySelector('.play-button').click()
+		setNowPlaying(item)
+		for (let i = 0; i < elems.length; i++) {
+			if (elems[i].classList.contains('active')) {
+				elems[i].classList.remove('active')
+			}
 		}
-	}
-	event.target.parentElement.classList.add('active')
+		item.parentElement.classList.add('active')
+	})
+})
+
+for (let i = 0; i < elems.length; i++) {
+	elems[i].addEventListener('click', function () {
+		elems[i].children[0].click()
+	})
 }

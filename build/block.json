@@ -1,12 +1,12 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
-  "name": "xlthlx/mp3-album",
+  "name": "xlthlx/audio-playlist",
   "version": "0.1.0",
-  "title": "Mp3 Album",
+  "title": "Audio Playlist",
   "category": "media",
   "icon": "playlist-audio",
-  "description": "Create and show your album with mp3 list.",
+  "description": "Create and show your audio playlist with player.",
   "keywords": [
     "mp3",
     "playlist",
@@ -24,10 +24,9 @@
       "link": true
     }
   },
-  "textdomain": "mp3-album",
+  "textdomain": "audio-playlist",
   "attributes": {
     "tracks": {
-      "selector": "li",
       "type": "array",
       "default": []
     }
