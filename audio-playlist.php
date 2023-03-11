@@ -22,7 +22,7 @@
  * @return string
  */
 function xlthlx_audio_playlist_block_render_callback( $block_attributes, $content ) {
-	$list      = '<div data-id="'.$block_attributes["playerId"].'" class="wp-block-xlthlx-audio-player player-container">';
+	$list      = '<div data-id="' . $block_attributes['playerId'] . '" class="wp-block-xlthlx-audio-player player-container">';
 	$list_end  = '</ol>';
 	$list_end .= '</div>';
 
@@ -48,7 +48,7 @@ function xlthlx_audio_playlist_block_render_callback( $block_attributes, $conten
 						<a href="' . $track['url'] . '">download the music</a>.
 					</p>
 				</audio>';
-			$list .= file_get_contents( plugin_dir_path( __FILE__ ) . '/audio-playlist-player.php' );
+			$list .= file_get_contents( plugin_dir_path( __FILE__ ) . '/audio-playlist-player.html' );
 			$list .= '<ol class="playlist">';
 		}
 
