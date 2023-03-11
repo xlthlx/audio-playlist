@@ -29,6 +29,10 @@
     "tracks": {
       "type": "array",
       "default": []
+    },
+    "playerId": {
+      "type": "string",
+      "default": ""
     }
   },
   "editorScript": "file:./index.js",

@@ -10,13 +10,13 @@
     "format": "wp-scripts format",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
-	"minify:js": "uglifyjs assets/js/playlist.js --compress --mangle --output assets/js/playlist.min.js",
+    "minify:js": "uglifyjs assets/js/playlist.js --compress --mangle --output assets/js/playlist.min.js",
     "packages-update": "wp-scripts packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
-    "start": "wp-scripts start"
+    "start": "wp-scripts start && npm run minify:js"
   },
   "devDependencies": {
     "@wordpress/scripts": "^25.4.0",
-	"uglify-js": "^3.17.2"
+    "uglify-js": "^3.17.2"
   }
 }

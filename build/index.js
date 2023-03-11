@@ -27,7 +27,8 @@ __webpack_require__.r(__webpack_exports__);
 function edit(_ref) {
   let {
     attributes,
-    setAttributes
+    setAttributes,
+    clientId
   } = _ref;
   const {
     tracks
@@ -44,18 +45,21 @@ function edit(_ref) {
     textAlign: 'center',
     level: 3
   }]];
+  const pID = attributes.playerId;
   const prepZero = number => {
     if (number <= 9) return '0' + number;else return number;
   };
-  let elems;
-  let playlist = document.querySelector('.playlist');
-  if (playlist && playlist.length !== 0) {
-    elems = playlist.getElementsByClassName('track');
-  }
-  let svgRepeat = document.querySelector('.dashicons-controls-repeat');
-  if (localStorage.getItem('repeat') === 'true' && svgRepeat) {
-    svgRepeat.classList.add('on');
-  }
+  const getElems = () => {
+    let playlist = document.getElementById(pID).querySelector('.playlist');
+    if (playlist && playlist.length !== 0) {
+      return document.getElementById(pID).getElementsByClassName('track');
+    }
+  };
+  const getRepeat = event => {
+    if (localStorage.getItem('repeat-' + pID) === 'true') {
+      event.target.classList.add('on');
+    }
+  };
   const onTracksUpload = media => {
     const updatedTracks = [...tracks];
     for (let index = 0; index < media.length; index++) {
@@ -70,6 +74,9 @@ function edit(_ref) {
     }
     setAttributes({
       tracks: updatedTracks
+    });
+    setAttributes({
+      playerId: clientId
     });
   };
   const onTrackChange = (index, media) => {
@@ -101,19 +108,22 @@ function edit(_ref) {
     return minutes + ':' + seconds;
   };
   const setSource = i => {
-    if (0 > elems.length) {
-      document.querySelector('.player').src = elems[i].children[0].getAttribute('href');
-      document.querySelector('.player').load();
-      document.querySelector('.play-button').click();
+    let elems = getElems();
+    if (0 !== elems.length) {
+      let playerCont = document.getElementById(pID);
+      let thisPLayer = playerCont.querySelector('.player');
+      thisPLayer.src = elems[i].children[0].getAttribute('href');
+      thisPLayer.load();
+      playerCont.querySelector('.play-button').click();
     }
   };
   const setNowPlaying = item => {
     let num = item.dataset.num;
     let title = item.dataset.title;
-    document.querySelector('.playing').textContent = num + ' - ' + title;
+    document.getElementById(pID).querySelector('.playing').textContent = num + ' - ' + title;
   };
   const setFirstTrack = elems => {
-    if (localStorage.getItem('repeat') === 'true') {
+    if (localStorage.getItem('repeat-' + pID) === 'true') {
       elems[0].classList.add('active');
       setSource(0);
       setNowPlaying(elems[0].children[0]);
@@ -123,7 +133,7 @@ function edit(_ref) {
     }
   };
   const setLastTrack = elems => {
-    if (localStorage.getItem('repeat') === 'true') {
+    if (localStorage.getItem('repeat-' + pID) === 'true') {
       elems[elems.length - 1].classList.add('active');
       setSource(elems.length - 1);
       setNowPlaying(elems[elems.length - 1].children[0]);
@@ -151,6 +161,7 @@ function edit(_ref) {
     }
   };
   const changeTrack = direction => {
+    let elems = getElems();
     if (elems.length !== 0) {
       for (let i = 0; i < elems.length; i++) {
         if (elems[i].classList.contains('active')) {
@@ -167,37 +178,38 @@ function edit(_ref) {
     }
   };
   const setPause = () => {
-    document.querySelector('.play-button').classList.remove('display-none');
-    document.querySelector('.pause-button').classList.add('display-none');
+    document.getElementById(pID).querySelector('.play-button').classList.remove('display-none');
+    document.getElementById(pID).querySelector('.pause-button').classList.add('display-none');
   };
   const setPlay = () => {
-    document.querySelector('.play-button').classList.add('display-none');
-    document.querySelector('.pause-button').classList.remove('display-none');
+    document.getElementById(pID).querySelector('.play-button').classList.add('display-none');
+    document.getElementById(pID).querySelector('.pause-button').classList.remove('display-none');
   };
   const toggleMuteUnmute = () => {
-    document.querySelector('.vol-muted-btn').classList.toggle('display-none');
-    document.querySelector('.vol-mute-btn').classList.toggle('display-none');
+    document.getElementById(pID).querySelector('.vol-muted-btn').classList.toggle('display-none');
+    document.getElementById(pID).querySelector('.vol-mute-btn').classList.toggle('display-none');
   };
   const setVolumeSlider = () => {
-    document.querySelector('.volume-slider').value = document.querySelector('.player').volume;
+    document.getElementById(pID).querySelector('.volume-slider').value = document.getElementById(pID).querySelector('.player').volume;
   };
   const clickMuteButton = () => {
-    document.querySelector('.player').muted = true;
-    document.querySelector('.player').volume = 0;
+    document.getElementById(pID).querySelector('.player').muted = true;
+    document.getElementById(pID).querySelector('.player').volume = 0;
     setVolumeSlider();
     toggleMuteUnmute();
-    document.querySelector('.volume-slider').style.backgroundSize = '0% 100%';
+    document.getElementById(pID).querySelector('.volume-slider').style.backgroundSize = '0% 100%';
   };
   const clickUnMuteButton = () => {
-    document.querySelector('.player').muted = false;
-    document.querySelector('.player').volume = 1;
+    document.getElementById(pID).querySelector('.player').muted = false;
+    document.getElementById(pID).querySelector('.player').volume = 1;
     setVolumeSlider();
     toggleMuteUnmute();
-    document.querySelector('.volume-slider').style.backgroundSize = '100% 100%';
+    document.getElementById(pID).querySelector('.volume-slider').style.backgroundSize = '100% 100%';
   };
   const clickPlayButton = () => {
+    let elems = getElems();
     if (0 !== elems.length) {
-      document.querySelector('.player').play();
+      document.getElementById(pID).querySelector('.player').play();
       for (let i = 0; i < elems.length; i++) {
         if (elems[i].classList.contains('active')) {
           setNowPlaying(elems[i].children[0]);
@@ -207,7 +219,7 @@ function edit(_ref) {
     }
   };
   const clickPauseButton = () => {
-    document.querySelector('.player').pause();
+    document.getElementById(pID).querySelector('.player').pause();
     setPause();
   };
   const onEndTRack = () => {
@@ -220,16 +232,19 @@ function edit(_ref) {
     changeTrack('prev');
   };
   const loadMetaData = event => {
-    document.querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration);
-    document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
-    document.querySelector('.time-sep').innerHTML = ' / ';
-    let seekSlider = document.querySelector('.seek-slider');
-    seekSlider.max = event.target.duration;
-    seekSlider.setAttribute('value', event.target.currentTime);
+    let elems = getElems();
+    if (elems) {
+      document.getElementById(pID).querySelector('.total-time').innerHTML = convertElapsedTime(event.target.duration);
+      document.getElementById(pID).querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
+      document.getElementById(pID).querySelector('.time-sep').innerHTML = ' / ';
+      let seekSlider = document.getElementById(pID).querySelector('.seek-slider');
+      seekSlider.max = event.target.duration;
+      seekSlider.setAttribute('value', event.target.currentTime);
+    }
   };
   const timeUpdate = event => {
-    document.querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
-    let seekSlider = document.querySelector('.seek-slider');
+    document.getElementById(pID).querySelector('.current-time').innerHTML = convertElapsedTime(event.target.currentTime);
+    let seekSlider = document.getElementById(pID).querySelector('.seek-slider');
     seekSlider.setAttribute('value', event.target.currentTime);
     seekSlider.value = event.target.currentTime;
     const min = seekSlider.min;
@@ -238,10 +253,10 @@ function edit(_ref) {
     seekSlider.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
   };
   const onChangeSlider = event => {
-    document.querySelector('.player').currentTime = event.target.value;
+    document.getElementById(pID).querySelector('.player').currentTime = event.target.value;
   };
   const changeVolume = event => {
-    let mp3Player = document.querySelector('.player');
+    let mp3Player = document.getElementById(pID).querySelector('.player');
     if (mp3Player) {
       mp3Player.volume = event.target.value;
     }
@@ -250,19 +265,20 @@ function edit(_ref) {
     const val = event.target.value;
     event.target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
   };
-  const clickRepeatButton = () => {
-    svgRepeat.classList.toggle('on');
-    localStorage.setItem('repeat', '');
-    if (svgRepeat.classList.contains('on')) {
-      localStorage.setItem('repeat', 'true');
+  const clickRepeatButton = event => {
+    event.target.classList.toggle('on');
+    localStorage.removeItem('repeat-' + pID);
+    if (event.target.classList.contains('on')) {
+      localStorage.setItem('repeat-' + pID, 'true');
     }
   };
   const onClickTrack = event => {
     event.preventDefault();
-    document.querySelector('.player').src = event.target.href;
-    document.querySelector('.player').load();
+    document.getElementById(pID).querySelector('.player').src = event.target.href;
+    document.getElementById(pID).querySelector('.player').load();
     clickPlayButton();
     setNowPlaying(event.target);
+    let elems = getElems();
     for (let i = 0; i < elems.length; i++) {
       if (elems[i].classList.contains('active')) {
         elems[i].classList.remove('active');
@@ -337,7 +353,9 @@ function edit(_ref) {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks, {
     template: PLAYLIST_TEMPLATE,
     templateLock: "insert"
-  }), audioPlayer, nowPlaying, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    id: pID
+  }, audioPlayer, nowPlaying, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "volume-container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "volume-show"
@@ -375,7 +393,8 @@ function edit(_ref) {
     id: "vol-muted-label",
     hidden: true
   }, "Unmute volume"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    onClick: () => clickRepeatButton(),
+    onMouseOver: event => getRepeat(event),
+    onClick: event => clickRepeatButton(event),
     title: "Repeat all",
     className: "repeat",
     "aria-labelledby": "vol-repeat-label"
@@ -468,7 +487,7 @@ function edit(_ref) {
         onClick: open
       }, "Add tracks");
     }
-  }))))));
+  })))))));
 }
 
 /***/ }),
@@ -597,7 +616,7 @@ module.exports = window["wp"]["element"];
   \************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"xlthlx/audio-playlist","version":"0.1.0","title":"Audio Playlist","category":"media","icon":"playlist-audio","description":"Create and show your audio playlist with player.","keywords":["mp3","playlist","list","album","cover"],"supports":{"html":true,"className":true,"multiple":true,"color":{"text":true,"background":true,"link":true}},"textdomain":"audio-playlist","attributes":{"tracks":{"type":"array","default":[]}},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"xlthlx/audio-playlist","version":"0.1.0","title":"Audio Playlist","category":"media","icon":"playlist-audio","description":"Create and show your audio playlist with player.","keywords":["mp3","playlist","list","album","cover"],"supports":{"html":true,"className":true,"multiple":true,"color":{"text":true,"background":true,"link":true}},"textdomain":"audio-playlist","attributes":{"tracks":{"type":"array","default":[]},"playerId":{"type":"string","default":""}},"editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

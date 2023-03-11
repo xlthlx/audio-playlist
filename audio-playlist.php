@@ -22,12 +22,12 @@
  * @return string
  */
 function xlthlx_audio_playlist_block_render_callback( $block_attributes, $content ) {
-	$list      = '<div class="wp-block-xlthlx-audio-player player-container">';
+	$list      = '<div data-id="'.$block_attributes["playerId"].'" class="wp-block-xlthlx-audio-player player-container">';
 	$list_end  = '</ol>';
 	$list_end .= '</div>';
 
 	if ( empty( $block_attributes['tracks'] ) ) {
-		return $content . $list . '<li class="track active">No tracks yet.</li>' . $list_end;
+		return $content . '<p>No tracks yet.</p>';
 	}
 
 	include_once ABSPATH . 'wp-admin/includes/media.php';
@@ -55,8 +55,8 @@ function xlthlx_audio_playlist_block_render_callback( $block_attributes, $conten
 		$class = ( 1 === $i ) ? 'track active' : 'track';
 
 		$list .= '<li class="' . $class . '">
-					<a href="' . $track['url'] . '" class="item" data-num="' . str_pad( $i, 2, '0', STR_PAD_LEFT ) . '" data-title="' . $metadata['title'] . '">
-		' . str_pad( $i, 2, '0', STR_PAD_LEFT ) . ' - ' . $metadata['title'] . ' - ' . $metadata['artist'] . '<span class="right">' . $metadata['length_formatted'] . '</span>
+					<a href="' . $track['url'] . '" class="item" data-num="' . str_pad( $i, 2, '0', STR_PAD_LEFT ) . '" data-title="' . $track['title'] . '">
+		' . str_pad( $i, 2, '0', STR_PAD_LEFT ) . ' - ' . $track['title'] . ' - ' . $track['artist'] . '<span class="right">' . $metadata['length_formatted'] . '</span>
 		</a>
 		</li>';
 	}
