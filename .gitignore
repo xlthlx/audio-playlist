@@ -49,3 +49,6 @@ Thumbs.db
 package-lock.json
 /node_modules
 /vendor
+
+# Project specific
+/content
