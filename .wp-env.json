@@ -4,6 +4,7 @@
 		"https://downloads.wordpress.org/theme/twentytwentythree.zip"
 	],
 	"plugins": [
+		"https://downloads.wordpress.org/plugin/query-monitor.zip",
 		"."
 	],
 	"mappings": {
@@ -15,6 +16,7 @@
 		"WP_DEBUG": true,
 		"WP_DEBUG_LOG": true,
 		"WP_DEBUG_DISPLAY": false,
-		"SCRIPT_DEBUG": true
+		"SCRIPT_DEBUG": true,
+		"ALTERNATE_WP_CRON": true
 	}
 }

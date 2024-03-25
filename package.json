@@ -16,7 +16,7 @@
     "start": "wp-scripts start && npm run minify:js"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^27.2.0",
-    "uglify-js": "^3.17.2"
+    "@wordpress/scripts": "^27.5.0",
+    "uglify-js": "^3.17.4"
   }
 }
