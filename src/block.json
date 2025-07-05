@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "xlthlx/audio-playlist",
+  "version": "0.1.0",
+  "title": "Audio Playlist",
+  "category": "media",
+  "icon": "playlist-audio",
+  "description": "Create and show your audio playlist with player.",
+  "keywords": ["mp3", "playlist", "list", "album", "cover"],
+  "supports": {
+	"html": true,
+	"className": true,
+	"multiple": true
+  },
+  "textdomain": "audio-playlist",
+  "attributes": {
+	"tracks": {
+	  "type": "array",
+	  "default": []
+	},
+	"playerId": {
+	  "type": "string",
+	  "default": ""
+	}
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

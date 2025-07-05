@@ -1,0 +1,48 @@
+/**
+ * Editor style.
+ */
+
+.player-container {
+	text-align: left !important;
+	padding-bottom: 40px;
+
+	.components-button.action {
+		border: none;
+		box-shadow: none;
+		background-color: transparent;
+		vertical-align: text-top;
+		padding: 0 0 0 2px;
+		width: 33px;
+		height: 33px;
+
+		&:hover {
+			border: none;
+			box-shadow: none;
+			background-color: transparent;
+		}
+	}
+
+	figcaption {
+		display: block !important;
+	}
+
+	.dashicons {
+		&.dashicons-trash {
+			width: 27px;
+			height: 27px;
+			font-size: 27px;
+			padding: 0;
+		}
+
+		&.dashicons-edit {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+ol.playlist {
+	li:last-child {
+		margin-top: 20px
+	}
+}

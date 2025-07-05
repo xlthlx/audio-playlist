@@ -1,0 +1,46 @@
+<p class="playing"></p>
+<div class="volume-container">
+	<div class="volume-show"><label hidden="">Volume</label>
+		<input class="volume-slider" type="range" autocomplete="off" min="0" max="1" value="1"
+			   step="0.1" role="slider" aria-label="Volume">
+		<button title="Mute volume" class="vol-mute-btn" aria-labelledby="vol-mute-label">
+			<span class="dashicons dashicons-controls-volumeon"></span>
+			<span id="vol-mute-label" hidden="">Mute volume</span>
+		</button>
+		<button title="Unmute volume" class="vol-muted-btn display-none" aria-labelledby="vol-muted-label">
+			<span class="dashicons dashicons-controls-volumeoff"></span>
+			<span id="vol-muted-label" hidden="">Unmute volume</span>
+		</button>
+	</div>
+	<button title="Repeat all" class="repeat" aria-labelledby="vol-repeat-label">
+		<span class="dashicons dashicons-controls-repeat"></span>
+		<span id="vol-repeat-label" hidden="">Repeat all</span>
+	</button>
+</div>
+<div class="seek-container left">
+	<label hidden="">Seek</label>
+	<input class="seek-slider" type="range" min="0" step="0.01" autocomplete="off" role="slider"
+		   aria-label="Seek">
+</div>
+<div class="right">
+	<span class="current-time"></span><span class="time-sep"></span><span class="total-time"></span>
+</div>
+<div class="play-pause-container">
+	<button title="Previous track" aria-labelledby="prev-label" class="prev-button" type="button">
+		<span class="dashicons dashicons-controls-back"></span>
+		<span id="prev-label" hidden="">Previous track</span>
+	</button>
+	<button title="Play" aria-labelledby="play-label" class="play-button" type="button">
+		<span class="dashicons dashicons-controls-play"></span>
+		<span id="play-label" hidden="">Play</span>
+	</button>
+	<button title="Pause" aria-labelledby="pause-label" class="pause-button display-none" type="button">
+		<span class="dashicons dashicons-controls-pause"></span>
+		<span id="pause-label" hidden="">Pause</span>
+	</button>
+	<button title="Next track" aria-labelledby="next-label" class="next-button" type="button">
+		<span class="dashicons dashicons-controls-forward"></span>
+		<span id="next-label" hidden="">Next track</span>
+	</button>
+</div>
+

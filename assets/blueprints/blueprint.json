@@ -1,0 +1,16 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/admin.php",
+  "login": true,
+  "preferredVersions": {
+    "php": "8.0",
+    "wp": "latest"
+  },
+  "siteOptions": {
+    "blogname": "Audio Playlist",
+    "blogdescription": "Audio Playlist is a WordPress plugin that gives you a block to create and show your audio playlist with player."
+  },
+  "plugins": [
+    "audio-playlist"
+  ]
+}

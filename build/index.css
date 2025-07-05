@@ -1,0 +1,43 @@
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/**
+ * Editor style.
+ */
+.player-container {
+  text-align: left !important;
+  padding-bottom: 40px;
+}
+.player-container .components-button.action {
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  vertical-align: text-top;
+  padding: 0 0 0 2px;
+  width: 33px;
+  height: 33px;
+}
+.player-container .components-button.action:hover {
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+.player-container figcaption {
+  display: block !important;
+}
+.player-container .dashicons.dashicons-trash {
+  width: 27px;
+  height: 27px;
+  font-size: 27px;
+  padding: 0;
+}
+.player-container .dashicons.dashicons-edit {
+  margin: 0;
+  padding: 0;
+}
+
+ol.playlist li:last-child {
+  margin-top: 20px;
+}
+
+/*# sourceMappingURL=index.css.map*/
